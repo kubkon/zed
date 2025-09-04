@@ -1357,11 +1357,15 @@ impl App {
     where
         F: FnOnce(AnyView, &mut Window, &mut App) -> T,
     {
+        println!("In App::update_window_id");
         self.update(|cx| {
             let mut window = cx
                 .windows
                 .get_mut(id)
-                .context("window not found")?
+                .with_context(|| {
+                    format!("In App::update_window_id, window not found {}", id.as_u64())
+                })
+                // .context("window not found")?
                 .take()
                 .context("window not found")?;
 
@@ -1372,6 +1376,10 @@ impl App {
             cx.window_update_stack.pop();
 
             if window.removed {
+                println!(
+                    "In App::update_window_id, removing window {} from the slot map",
+                    window.handle.id.as_u64()
+                );
                 cx.window_handles.remove(&id);
                 cx.windows.remove(id);
 

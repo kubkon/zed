@@ -298,6 +298,7 @@ impl Platform for WindowsPlatform {
     }
 
     fn quit(&self) {
+        println!("In WindowsPlatform::quit");
         self.foreground_executor()
             .spawn(async { unsafe { PostQuitMessage(0) } })
             .detach();
@@ -684,6 +685,7 @@ impl WindowsPlatformInner {
         }
         match message {
             WM_GPUI_CLOSE_ONE_WINDOW => {
+                println!("In handle_gpui_events, handling WM_GPUI_CLOSE_ONE_WINDOW event");
                 if self.close_one_window(HWND(lparam.0 as _)) {
                     unsafe { PostQuitMessage(0) };
                 }

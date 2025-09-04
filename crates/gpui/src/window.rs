@@ -1373,6 +1373,10 @@ impl Window {
 
     /// Close this window.
     pub fn remove_window(&mut self) {
+        println!(
+            "In Window::remove_window, marking window {} for removal",
+            self.handle.id.as_u64()
+        );
         self.removed = true;
     }
 

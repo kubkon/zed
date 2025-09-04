@@ -250,6 +250,7 @@ impl WindowsWindowInner {
     }
 
     fn handle_close_msg(&self) -> Option<isize> {
+        println!("In WindowsWindowInner::handle_close_msg");
         let mut callback = self.state.borrow_mut().callbacks.should_close.take()?;
         let should_close = callback();
         self.state.borrow_mut().callbacks.should_close = Some(callback);

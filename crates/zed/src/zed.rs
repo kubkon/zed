@@ -426,6 +426,7 @@ pub fn initialize_workspace(
             handle
                 .update(cx, |workspace, cx| {
                     // We'll handle closing asynchronously
+                    println!("In window.on_window_should_close closure, closing window!");
                     workspace.close_window(&CloseWindow, window, cx);
                     false
                 })
