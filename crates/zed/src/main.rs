@@ -1070,7 +1070,8 @@ async fn restore_or_create_workspace(app_state: Arc<AppState>, cx: &mut AsyncApp
                     Editor::new_file(workspace, &Default::default(), window, cx)
                 },
             )
-        })?
+        })
+        .unwrap()
         .await?;
     }
 

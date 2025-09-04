@@ -763,6 +763,7 @@ impl App {
         self.start_update();
         let result = update(self);
         self.finish_update();
+        log::error!("OOOPSIE");
         result
     }
 
@@ -1357,14 +1358,15 @@ impl App {
     where
         F: FnOnce(AnyView, &mut Window, &mut App) -> T,
     {
-        println!("In App::update_window_id");
+        println!("In App::update_window_id {}", id.as_u64());
         self.update(|cx| {
+            println!("HMM {}", cx.windows.get(id).is_none());
             let mut window = cx
                 .windows
                 .get_mut(id)
                 .with_context(|| {
                     format!("In App::update_window_id, window not found {}", id.as_u64())
-                })
+                })?
                 // .context("window not found")?
                 .take()
                 .context("window not found")?;
@@ -2193,7 +2195,11 @@ impl AppContext for App {
     where
         F: FnOnce(AnyView, &mut Window, &mut App) -> T,
     {
-        self.update_window_id(handle.id, update)
+        let res = self.update_window_id(handle.id, update);
+        if let Err(err) = &res {
+            println!("Err => {err:?}");
+        }
+        res
     }
 
     fn read_window<T, R>(

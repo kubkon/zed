@@ -1570,7 +1570,7 @@ impl Workspace {
                     .map(|w| w.centered_layout)
                     .unwrap_or(false);
 
-                cx.update_window(window.into(), |_, window, cx| {
+                let res = cx.update_window(window.into(), |_, window, cx| {
                     window.replace_root(cx, |window, cx| {
                         let mut workspace = Workspace::new(
                             Some(workspace_id),
@@ -1583,7 +1583,11 @@ impl Workspace {
                         workspace.centered_layout = centered_layout;
                         workspace
                     });
-                })?;
+                });
+                if let Err(err) = &res {
+                    println!("In Workspace::new_local => {err:?}");
+                }
+                res?;
                 window
             } else {
                 let window_bounds_override = window_bounds_env_override();

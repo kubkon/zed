@@ -989,7 +989,14 @@ unsafe extern "system" fn window_procedure(
         };
     }
 
-    let ptr = unsafe { get_window_long(hwnd, GWLP_USERDATA) } as *mut Weak<WindowsPlatformInner>;
+    log::error!("in window_procedure, before get_window_long");
+    let raw_handle = unsafe { get_window_long(hwnd, GWLP_USERDATA) };
+    log::error!("raw_handle: {raw_handle}");
+    if raw_handle == 0 {
+        log::error!("Window handle is null");
+    }
+    let ptr = raw_handle as *mut Weak<WindowsPlatformInner>;
+    // let ptr = unsafe { get_window_long(hwnd, GWLP_USERDATA) } as *mut Weak<WindowsPlatformInner>;
     if ptr.is_null() {
         return unsafe { DefWindowProcW(hwnd, msg, wparam, lparam) };
     }

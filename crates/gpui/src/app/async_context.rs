@@ -86,7 +86,7 @@ impl AppContext for AsyncApp {
     {
         let app = self.app.upgrade().context("app was released")?;
         let mut lock = app.try_borrow_mut()?;
-        // println!("In AsyncApp::update_window");
+        println!("In AsyncApp::update_window");
         lock.update_window(window, f)
     }
 
